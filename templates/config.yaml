@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "jenkins.fullname" . }}-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "jenkins.labels" . | nindent 4 }}
+data:
+  apply_config.sh: |
+    jenkins-plugin-cli --plugins \
+     configuration-as-code:1.46 \
+     git:4.5.2 \
+     workflow-aggregator:2.6 \
+     docker-plugin:1.2.2 \
+     docker-workflow:1.25
+    cp -r /usr/share/jenkins/ref/plugins/ /var/jenkins_home/
